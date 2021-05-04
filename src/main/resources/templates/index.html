@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Weather</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/styles/weather/main.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+</head>
+<body>
+<section id="content">
+    <aside>
+        <div class="search-bar">
+            <button onclick="findCity()"><i class="fas fa-search"></i></button>
+            <input type="text" placeholder="Location" id="location">
+        </div>
+        <div th:if= "${weather != 'noWeatherInit'}">
+            <h2>
+                Weather Details
+            </h2>
+
+            <table>
+                <tr>
+                    <td>Feels like</td>
+                    <td th:text="${weather.getFeelsLike()} + ' &#186;'"> </td>
+                </tr>
+                <tr>
+                    <td>Wind speed</td>
+                    <td th:text="${weather.getWindSpeed()}">16 mph</td>
+                </tr>
+                <tr>
+                    <td>Pressure</td>
+                    <td th:text="${weather.getPressure()}">1024B</td>
+                </tr>
+            </table>
+            <hr />
+
+            <h2>
+                Forecast days
+            </h2>
+
+            <div th:each="day : ${weather.getForecastDays()}">
+                <h3 th:text="${day.getDate()}">2020-06-04</h3>
+                <table>
+                    <tr>
+                        <td>Max temperature</td>
+                        <td th:text="${day.getMaxTemperature()}">16 &#186;</td>
+                    </tr>
+                    <tr>
+                        <td>Min temperature</td>
+                        <td th:text="${day.getMinTemperature()}">12 &#186;</td>
+                    </tr>
+                    <tr>
+                        <td>Sunrise</td>
+                        <td th:text="${day.getSunrise()}">08:43</td>
+                    </tr>
+
+                    <tr>
+                        <td>Sunset</td>
+                        <td th:text="${day.getSunset()}">19:23</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </aside>
+    <main>
+
+        <div th:if= "${weather != 'noWeatherInit'}">
+            <div class="temp">
+                <h1 th:text="${weather.getTemperature()} +'&#186;'">16&#186;</h1>
+            </div>
+            <div class="city">
+                <h2 th:text="${weather.getLocation()}">City</h2>
+                <p th:text="${#temporals.format(localDate, 'dd-MM-yyyy')}">Monday 09-06-2020</p>
+            </div>
+        </div>
+    </main>
+</section>
+
+<script>
+    function findCity(){
+        const location = document.querySelector("#location");
+
+        window.location.replace('/weather?l=' +location.value);
+    }
+</script>
+</body>
+</html>

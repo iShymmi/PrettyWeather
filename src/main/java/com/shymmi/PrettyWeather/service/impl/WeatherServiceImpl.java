@@ -15,7 +15,7 @@ public class WeatherServiceImpl implements WeatherService {
     private final WeatherClient weatherClient;
 
     @Override
-    public WeatherDto getWeather() {
-        return weatherClient.getForecastWeatherForCity("Gdansk");
+    public WeatherDto getWeather(String lcoation) {
+        return weatherClient.getForecastWeatherForCity(lcoation);
     }
 }
