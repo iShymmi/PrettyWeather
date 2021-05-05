@@ -1,32 +1,48 @@
 package com.shymmi.PrettyWeather.controller;
 
+import com.shymmi.PrettyWeather.model.WeatherDto;
 import com.shymmi.PrettyWeather.service.WeatherService;
+import com.shymmi.PrettyWeather.exception.LocationNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class WeatherController {
 
     private final WeatherService weatherService;
 
-    @GetMapping("/weather")
-    public String getWeather(@RequestParam(value="l") String location, Model model) {
-        model.addAttribute("weather", weatherService.getWeather(location));
+    @GetMapping({"","/","/weather"})
+    public String getWeather(@RequestParam(value="l") Optional<String> location, Model model) {
+        WeatherDto weather = null;
+
+        if(!location.isPresent()) {
+            return noWeatherInitIndex(model);
+        }
+
+        try {
+            weather = weatherService.getWeather(location.get());
+        }catch (LocationNotFoundException e){
+            model.addAttribute("exception", true);
+
+            return noWeatherInitIndex(model);
+        }
+
+        model.addAttribute("weather", weather);
         model.addAttribute("localDate", LocalDate.now());
 
         return "index";
     }
 
-    @RequestMapping({"","/"})
-    public String index(Model model){
+    private String noWeatherInitIndex(Model model) {
         model.addAttribute("weather", "noWeatherInit");
         return "index";
     }

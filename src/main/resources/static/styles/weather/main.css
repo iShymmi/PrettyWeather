@@ -1,11 +1,12 @@
 body, html {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 * {
     font-size: 18px;
-    color:#e6e5ec;
+    color: #fafafa;
 }
 
 #content {
@@ -21,18 +22,18 @@ body, html {
 
 aside {
     height: 100vh;
-    width: 40%;
+    width: 25vw;
     max-width: 450px;
     color: #FFF;
-
     background: rgba(0, 0, 0, 0.288);
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px );
     border: 1px solid rgba(0, 0, 0, 0.18);
     padding: 20px;
-
     overflow-y: scroll;
+    position: absolute;
+    right: 0;
 }
 
 input {
@@ -123,48 +124,43 @@ aside::-webkit-scrollbar-thumb {
 }
 
 main {
-    height: 200px;
-    width: 400px;
-    align-self: center;
-    margin-left: 200px;
-    margin-bottom: 200px;
-}
-
-main div:first-of-type {
+    width: 75vw;
     display: flex;
-    flex-wrap: wrap;
-}
-.temp {
-    width: 30%;
-    display: flex;
-    justify-content: flex-end;
-    height: 200px;
     align-items: center;
-    padding-right: 20px;
+    justify-content: center;
 }
 
-.temp h1 {
-    font-size: 80px;
-    color:#622569;
-}
-.city {
+.weather-info {
     display: flex;
-    align-items: flex-end;
-    align-items: center;
-    height: 200px;
-    width: calc(70% - 20px);
-}
-
-.city h2 {
-    color:#622569;
-    font-size:40px;
-    width: 0;
-}
-
-main p {
-    color:#622569;
-    width: 100%;
-    margin-top:80px;
+    background: rgba(35, 119, 245, 0.397);
+    box-shadow: 0 12px 36px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
     font-weight: bold;
+}
+
+
+.weather-temp {
+    font-size: 7.6rem;
+    margin-right: 25px;
+    color:#FFF;
+}
+
+.weather-city {
+    font-size: 6rem;
+    color:#FFF;
+}
+
+.weather-date {
+    font-size: 1.6rem;
+    color:#FFF;
+}
+
+.Erro-msg {
+    color: #ef3232;
+    text-align: center;
 }
 

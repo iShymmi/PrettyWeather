@@ -3,6 +3,8 @@ package com.shymmi.PrettyWeather.webclient.weather;
 import com.shymmi.PrettyWeather.model.DayDto;
 import com.shymmi.PrettyWeather.model.WeatherDto;
 import com.shymmi.PrettyWeather.webclient.weather.dto.WeatherMainDto;
+import com.shymmi.PrettyWeather.exception.LocationNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,6 +17,7 @@ import java.util.List;
 import static java.util.Arrays.stream;
 
 @Component
+@Slf4j
 public class WeatherClient {
 
     private static final String WEATHERAPI_URL = "https://weatherapi-com.p.rapidapi.com/forecast.json";
@@ -23,15 +26,22 @@ public class WeatherClient {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public WeatherDto getForecastWeatherForCity(String city) {
+    public WeatherDto getForecastWeatherForCity(String city) throws LocationNotFoundException{
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-rapidapi-key",key);
         headers.set("x-rapidapi-host", host);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        WeatherMainDto weatherMainDto = restTemplate.exchange(WEATHERAPI_URL + "?q=" +city +"&days=3",
-                                        HttpMethod.GET, entity, WeatherMainDto.class).getBody();
+        WeatherMainDto weatherMainDto = new WeatherMainDto();
+
+        try {
+            weatherMainDto = restTemplate.exchange(WEATHERAPI_URL + "?q=" +city +"&days=3",
+                    HttpMethod.GET, entity, WeatherMainDto.class).getBody();
+        }catch (Exception e){
+            throw new LocationNotFoundException("Location not found");
+        }
+
 
         List<DayDto> days = new ArrayList<>();
         DayDto.builder().build();

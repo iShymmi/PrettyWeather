@@ -15,6 +15,7 @@
             <button onclick="findCity()"><i class="fas fa-search"></i></button>
             <input type="text" placeholder="Location" id="location">
         </div>
+        <h2 th:if="${exception}" class="Erro-msg">Location not found</h2>
         <div th:if= "${weather != 'noWeatherInit'}">
             <h2>
                 Weather Details
@@ -23,7 +24,7 @@
             <table>
                 <tr>
                     <td>Feels like</td>
-                    <td th:text="${weather.getFeelsLike()} + ' &#186;'"> </td>
+                    <td th:text="${weather.getFeelsLike()} +'&#186;C'"> </td>
                 </tr>
                 <tr>
                     <td>Wind speed</td>
@@ -45,11 +46,11 @@
                 <table>
                     <tr>
                         <td>Max temperature</td>
-                        <td th:text="${day.getMaxTemperature()}">16 &#186;</td>
+                        <td th:text="${day.getMaxTemperature()} +'&#186;C'">16 &#186;</td>
                     </tr>
                     <tr>
                         <td>Min temperature</td>
-                        <td th:text="${day.getMinTemperature()}">12 &#186;</td>
+                        <td th:text="${day.getMinTemperature()} +'&#186;C'">12 &#186;</td>
                     </tr>
                     <tr>
                         <td>Sunrise</td>
@@ -67,22 +68,31 @@
     <main>
 
         <div th:if= "${weather != 'noWeatherInit'}">
-            <div class="temp">
-                <h1 th:text="${weather.getTemperature()} +'&#186;'">16&#186;</h1>
-            </div>
-            <div class="city">
-                <h2 th:text="${weather.getLocation()}">City</h2>
-                <p th:text="${#temporals.format(localDate, 'dd-MM-yyyy')}">Monday 09-06-2020</p>
+            <div class="weather-info">
+                <div class="weather-temp" th:text="${weather.getTemperature()} +'&#186;C'">16*</div>
+                <div>
+                    <div class="weather-city" th:text="${weather.getLocation()}">City</div>
+                    <div class="weather-date" th:text="${#temporals.format(localDate, 'EEEE, dd MMM yy')}">Monday 09-06-2020</div>
+                </div>
             </div>
         </div>
     </main>
 </section>
 
 <script>
-    function findCity(){
-        const location = document.querySelector("#location");
 
-        window.location.replace('/weather?l=' +location.value);
+    const loc = document.querySelector("#location");
+
+    loc.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+
+            findCity();
+        }
+    });
+
+    function findCity(){
+        window.location.replace('/weather?l=' +loc.value);
     }
 </script>
 </body>
