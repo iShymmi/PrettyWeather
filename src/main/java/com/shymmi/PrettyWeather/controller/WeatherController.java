@@ -21,20 +21,14 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping({"","/","/weather"})
-    public String getWeather(@RequestParam(value="l") Optional<String> location, Model model) {
-        WeatherDto weather = null;
+    public String getWeather(@RequestParam(value="l") Optional<String> location, Model model) throws LocationNotFoundException {
+        WeatherDto weather = new WeatherDto();
 
         if(!location.isPresent()) {
             return noWeatherInitIndex(model);
         }
 
-        try {
-            weather = weatherService.getWeather(location.get());
-        }catch (LocationNotFoundException e){
-            model.addAttribute("exception", true);
-
-            return noWeatherInitIndex(model);
-        }
+        weather = weatherService.getWeather(location.get());
 
         model.addAttribute("weather", weather);
         model.addAttribute("localDate", LocalDate.now());
